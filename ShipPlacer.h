@@ -21,3 +21,13 @@ void RemoveShipDown(char boardOfPlayer[10][10], int row, int column, const int L
 void RemoveShipLeft(char boardOfPlayer[10][10], int row, int column, const int LengthOfShipType);
 void RemoveShipRight(char boardOfPlayer[10][10], int row, int column, const int LengthOfShipType);
 void RemoveShip(char boardOfPlayer[10][10], int row, int column, const int LengthOfShipType, const char direction);
+
+const int LENGTHofSmallShip = 2;
+const int LENGTHofMediumShip = 3;
+const int LENGTHofLargeShip = 4;
+const int LENGTHofCruiser = 6;
+const int NUMBERofSmallShips = 4;
+const int NUMBERofMediumShips = 3;
+const int NUMBERofLargeShips = 2;
+const int NUMBERofCruisers = 1;
+const int MAXSHIPS = 10;
