@@ -19,41 +19,17 @@ void BoardCreator(char boardOfPlayer[10][10]) {
 
 void PresetBoard(char boardOfPlayer[10][10], unsigned int numOfBoard) {
 	switch (numOfBoard) {
-	case 0:
-		break;//I have changed my mind about using presets
-	case 1: // As in the example - manually put - bad idea..
-		boardOfPlayer[0][0] = 'S';
-		boardOfPlayer[0][1] = 'S';
-		boardOfPlayer[0][3] = 'S';
-		boardOfPlayer[1][3] = 'S';
-		boardOfPlayer[2][3] = 'S';
-		boardOfPlayer[0][6] = 'S';
-		boardOfPlayer[0][7] = 'S';
-		boardOfPlayer[0][8] = 'S';
-		boardOfPlayer[0][9] = 'S';
-		boardOfPlayer[2][0] = 'S';
-		boardOfPlayer[3][0] = 'S';
-		boardOfPlayer[4][0] = 'S';
-		boardOfPlayer[5][0] = 'S';
-		boardOfPlayer[2][5] = 'S';
-		boardOfPlayer[2][6] = 'S';
-		boardOfPlayer[2][7] = 'S';
-		boardOfPlayer[2][9] = 'S';
-		boardOfPlayer[3][9] = 'S';
-		boardOfPlayer[5][5] = 'S';
-		boardOfPlayer[6][5] = 'S';
-		boardOfPlayer[5][9] = 'S';
-		boardOfPlayer[6][9] = 'S';
-		boardOfPlayer[7][9] = 'S';
-		boardOfPlayer[7][0] = 'S';
-		boardOfPlayer[7][1] = 'S';
-		boardOfPlayer[9][4] = 'S';
-		boardOfPlayer[9][5] = 'S';
-		boardOfPlayer[9][6] = 'S';
-		boardOfPlayer[9][7] = 'S';
-		boardOfPlayer[9][8] = 'S';
-		boardOfPlayer[9][9] = 'S';
-
+	case 1:
+		ShipPlacer(boardOfPlayer, 0, 0, LENGTHofSmallShip, 'R');
+		ShipPlacer(boardOfPlayer, 0, 3, LENGTHofMediumShip, 'D');
+		ShipPlacer(boardOfPlayer, 0, 6, LENGTHofLargeShip, 'R');
+		ShipPlacer(boardOfPlayer, 2, 0, LENGTHofLargeShip, 'D');
+		ShipPlacer(boardOfPlayer, 2, 5, LENGTHofMediumShip, 'R');
+		ShipPlacer(boardOfPlayer, 2, 9, LENGTHofSmallShip, 'D');
+		ShipPlacer(boardOfPlayer, 5, 5, LENGTHofSmallShip, 'D');
+		ShipPlacer(boardOfPlayer, 5, 9, LENGTHofMediumShip, 'D');
+		ShipPlacer(boardOfPlayer, 7, 0, LENGTHofSmallShip, 'R');
+		ShipPlacer(boardOfPlayer, 9, 4, LENGTHofCruiser, 'R');
 		break;
 	case 2:
 		ShipPlacer(boardOfPlayer, 0, 0, LENGTHofSmallShip, 'D'); //row - column - length - direction

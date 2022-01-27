@@ -25,6 +25,8 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 	{
 		ShowPlayerMenuMessage(1);
 		std::cin >> option;
+		int presetNum = 0;
+		
 
 		switch (option)
 		{
@@ -32,7 +34,10 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 			run1 = false;
 			break;
 
-		case 2: PresetBoard(boardPlayerOne, 2);
+		case 2: InstructPresetNum();
+			std::cin >> presetNum;
+			InputValidator(presetNum, 0, 10);
+			PresetBoard(boardPlayerOne, presetNum);
 			run1 = false;
 			break;
 		default:
@@ -48,16 +53,19 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 	while (run2)
 	{
 		ShowPlayerMenuMessage(2);
-
 		std::cin >> option;
-
+		int presetNum = 0;
+		
 		switch (option)
 		{
 		case 1:ManualPlace(boardPlayerTwo);
 			run2 = false;
 			break;
 
-		case 2: PresetBoard(boardPlayerTwo, 2);
+		case 2: InstructPresetNum();
+			std::cin >> presetNum;
+			InputValidator(presetNum, 0, 10);
+			PresetBoard(boardPlayerTwo, presetNum);
 			run2 = false;
 			break;
 		default:
@@ -78,33 +86,43 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cout << std::endl;
 
 		std::cout << "Coordinates to attack" << std::endl;
-		std::cout << "Column: ";
-		std::cin >> column;
-
-
-		if (column > 10 || column < 0)
-		{
-			ShowInvalidColumnMessage();
-
-			std::cin >> column;
-			std::cout << std::endl;
-		}
-
-		std::cout << "Row: ";
+		
+		std::cout << "Row: (between [0 ; 9])";
 		std::cin >> row;
-		std::cout << std::endl;
-
-
-		if (row > 10 || row < 0)
+		InputValidator(row, 0, 9);
+		
+		while (std::cin.fail() || (row < 0) || (row > 9)) //Check if input is valid for the rows
 		{
+
+			if (std::cin.fail()) //What triggers the false flag - if its still true, to clear it, a.k.a not read from console
+			{
+				std::cin.clear();
+				std::cin.ignore();
+			}
 			ShowInvalidRowMessage();
-
+			std::cout << "Pick a number between [0 ; 9]: ";
 			std::cin >> row;
-			std::cout << std::endl;
-
 		}
+		
+		std::cout << "Column: (between [0 ; 9])";
+		std::cin >> column;
+		InputValidator(column, 0, 9);
 
-		while (Attack(boardPlayerTwo, boardToShowToOpponentPlayerTwo, row, column))
+		while (std::cin.fail() || (column < 0) || (column > 9)) //Check if input is valid for the columns
+		{
+			
+			if (std::cin.fail()) //What triggers the false flag - if its still true, to clear it, a.k.a not read from console
+			{
+				std::cin.clear();
+				std::cin.ignore();
+			}
+			ShowInvalidColumnMessage();
+			std::cout << "Pick a number between [0 ; 9]: ";
+			std::cin >> column;
+		}
+		
+
+		while (Attack(boardPlayerTwo, boardToShowToOpponentPlayerTwo, row, column, unhitSpotsPlayerTwo))
 		{
 			int option = 0;
 
@@ -124,23 +142,44 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 
 			switch (option)
 			{
-			case 1:row -= 1;
+			case 1:
+				if (row == 0)
+				{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+				}
+				row -= 1;
 				break;
-			case 2: row += 1;
+			case 2:
+				if (row == 9)
+				{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+				}
+				row += 1;
 				break;
-			case 3:column -= 1;
+			case 3:
+				if (column == 0)
+				{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+				}
+				column -= 1;
 				break;
-			case  4: column += 1;
-				break;
-			case 5:;
+			case  4:
+				if (column == 9)
+				{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+				}
+				column += 1;
 				break;
 			default:;
 
 			}
 
 		}
-		std::cout << "There was nothing" << std::endl;
-		std::cout << std::endl;
+		
 		ShowBoard(boardToShowToOpponentPlayerTwo);
 		std::cout << std::endl;
 
@@ -151,31 +190,42 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cout << std::endl;
 
 		std::cout << "Coordinates to attack" << std::endl;
-		std::cout << "Column: ";
-		std::cin >> column;
 
-
-		if (column > 10 || column < 0)
-		{
-			ShowInvalidColumnMessage();
-			std::cin >> column;
-			std::cout << std::endl;
-		}
-
-		std::cout << "Row: ";
+		std::cout << "Row: (between [0 ; 9])";
 		std::cin >> row;
-		std::cout << std::endl;
+		InputValidator(row, 0, 9);
 
-
-		if (row > 10 || row < 0)
+		while (std::cin.fail() || (row < 0) || (row > 9)) //Check if input is valid for the rows
 		{
-			ShowInvalidRowMessage();
-			std::cin >> row;
-			std::cout << std::endl;
 
+			if (std::cin.fail()) //What triggers the false flag - if its still true, to clear it, a.k.a not read from console
+			{
+				std::cin.clear();
+				std::cin.ignore();
+			}
+			ShowInvalidRowMessage();
+			std::cout << "Pick a number between [0 ; 9]: ";
+			std::cin >> row;
+		}
+		
+		std::cout << "Column: (between [0 ; 9]) ";
+		std::cin >> column;
+		InputValidator(column, 0, 9);
+
+		while (std::cin.fail() || (column < 0) || (column > 9)) //Check if input is valid for the columns
+		{
+
+			if (std::cin.fail()) //What triggers the false flag - if its still true, to clear it, a.k.a not read from console
+			{
+				std::cin.clear();
+				std::cin.ignore();
+			}
+			ShowInvalidColumnMessage();
+			std::cout << "Pick a number between [0 ; 9]: ";
+			std::cin >> column;
 		}
 
-		while (Attack(boardPlayerOne, boardToShowToOpponentPlayerOne, row, column))
+		while (Attack(boardPlayerOne, boardToShowToOpponentPlayerOne, row, column, unhitSpotsPlayerOne))
 		{
 			int option = 0;
 			unhitSpotsPlayerOne--;
@@ -194,24 +244,43 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 
 			switch (option)
 			{
-			case 1:row -= 1;
-				break;
-			case 2: row += 1;
-				break;
-			case 3:column -= 1;
-				break;
-			case  4: column += 1;
-				break;
-			case 5:;
-				break;
+			case 1: 
+					if (row == 0)
+					{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+						continue;
+					}
+					row -= 1;
+						break;
+			case 2: 
+					if (row == 9)
+					{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+					}
+					row += 1;
+						break;
+			case 3:
+					if (column == 0)
+					{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+					}
+					column -= 1;
+						break;
+			case  4: 
+					if (column == 9)
+					{
+					std::cout << "Oops, it seems like you are at the end of the board, please try another input!" << std::endl;
+					continue;
+					}
+					column += 1;
+						break;
 			default:;
 
 			}
 
 		}
-
-		std::cout << "There was nothing" << std::endl;
-		std::cout << std::endl;
 
 		ShowBoard(boardToShowToOpponentPlayerOne);
 		std::cout << std::endl;
@@ -257,11 +326,11 @@ void ManualPlace(char boardOfPlayer[10][10])
 		int row = 0;
 
 		std::cout << "What kind of ship do you want to place ? " << std::endl;
-		std::cout << "1) Small ship - 2 blocks length " << std::endl;
-		std::cout << "2) Medium ship - 3 blocks length " << std::endl;
-		std::cout << "3) Large ship - 4 blocks length " << std::endl;
+		std::cout << "1) Small ship   -	2 blocks length " << std::endl;
+		std::cout << "2) Medium ship  -	3 blocks length " << std::endl;
+		std::cout << "3) Large ship   -	4 blocks length " << std::endl;
 		std::cout << "4) Cruiser ship - 4 blocks length " << std::endl;
-		std::cout << "Your choise: ";
+		std::cout << "Your choice: ";
 
 		std::cin >> shipOption;
 
@@ -279,7 +348,7 @@ void ManualPlace(char boardOfPlayer[10][10])
 			}
 			else
 			{
-				std::cout << "There is no more small ships " << std::endl;
+				std::cout << "There are no more small ships left to place! " << std::endl;
 				std::cout << "Try again " << std::endl;
 				std::cout << std::endl;
 				continue;
@@ -294,8 +363,8 @@ void ManualPlace(char boardOfPlayer[10][10])
 			}
 			else
 			{
-				std::cout << "There is no more medium ships " << std::endl;
-				std::cout << "Try again " << std::endl;
+				std::cout << "There are no more medium ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
 				std::cout << std::endl;
 				continue;
 			}
@@ -308,8 +377,8 @@ void ManualPlace(char boardOfPlayer[10][10])
 			}
 			else
 			{
-				std::cout << "There is no more large ships " << std::endl;
-				std::cout << "Try again " << std::endl;
+				std::cout << "There are no more large ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
 				std::cout << std::endl;
 				continue;
 
@@ -322,25 +391,22 @@ void ManualPlace(char boardOfPlayer[10][10])
 			}
 			else
 			{
-				std::cout << "There is no more cruiser ships " << std::endl;
-				std::cout << "Try again " << std::endl;
+				std::cout << "There are no more cruiser ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
 				std::cout << std::endl;
 				continue;
 
 			}
 			break;
 		default:
-			std::cout << "Invalid input " << std::endl;
-			std::cout << std::endl;
-			std::cin.clear();
-			std::cin.ignore((256), '\n');
+			InputValidator(shipOption, 1, 4);
 			continue;
 
 		}
 
-		std::cout << "Coordinates of the staring point " << std::endl;
+		std::cout << "Coordinates of the starting point: " << std::endl;
 
-		std::cout << "Row: ";
+		std::cout << "*Row: ";
 		std::cin >> row;
 
 		if (row > 10 || row < 0)
@@ -351,7 +417,7 @@ void ManualPlace(char boardOfPlayer[10][10])
 
 		}
 
-		std::cout << "Column: ";
+		std::cout << "*Column: ";
 		std::cin >> column;
 		std::cout << std::endl;
 
@@ -395,8 +461,8 @@ void ManualPlace(char boardOfPlayer[10][10])
 
 		if (!ShipPlacer(boardOfPlayer, row, column, currentShipLength, direction))
 		{
-			std::cout << "Invalid placement" << std::endl;
-			std::cout << "Please try again " << std::endl;
+			std::cout << "Invalid placement !" << std::endl;
+			std::cout << "Please try again ! " << std::endl;
 			std::cout << std::endl;
 			continue;
 		}
@@ -415,7 +481,7 @@ void ManualPlace(char boardOfPlayer[10][10])
 		std::cout << "Do you want to change your ship position ? " << std::endl;
 		std::cout << "1) Yes " << std::endl;
 		std::cout << "2) No " << std::endl;
-		std::cout << "Your choise: ";
+		std::cout << "Your choice: ";
 		std::cin >> changeOption;
 		std::cout << std::endl;
 
@@ -424,7 +490,7 @@ void ManualPlace(char boardOfPlayer[10][10])
 		switch (changeOption)
 		{
 		case 1:RemoveShip(boardOfPlayer, row, column, currentShipLength, direction);
-			std::cout << "Enter your new ship position " << std::endl;
+			std::cout << "Enter your new ship position: " << std::endl;
 			std::cout << std::endl;
 			placedShips--;
 			break;
@@ -437,14 +503,24 @@ void ManualPlace(char boardOfPlayer[10][10])
 	}
 }
 
-bool Attack(char boardOfPlayer[10][10], char boardToShowToOpponent[10][10], int rowCoordinate, int columnCoordinate) {
+bool Attack(char boardOfPlayer[10][10], char boardToShowToOpponent[10][10], int rowCoordinate, int columnCoordinate, int &unHitSpotsPlayer) {
+	if (boardOfPlayer[rowCoordinate][columnCoordinate] == 'C')
+	{
+		std::cout << "You have already made a guess for this spot, please make a new one : " << std::endl;
+		unHitSpotsPlayer++;//To compensate for returning true, while we do not make any change to the board
+		return true;
+	}
+	
 	if (boardOfPlayer[rowCoordinate][columnCoordinate] == 'S') {
-		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'H';
-
+		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'H'; // H for hit
+		boardOfPlayer[rowCoordinate][columnCoordinate] = 'C'; //C for checked
 		return true; // You have hit the target
 	}
 	else {
-		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'X';
+		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'X'; // X for miss
+		boardOfPlayer[rowCoordinate][columnCoordinate] = 'C';
+		std::cout << "There was nothing!" << std::endl;
+		std::cout << std::endl;
 		return false;
 	}
 }

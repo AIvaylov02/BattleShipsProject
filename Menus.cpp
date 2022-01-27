@@ -58,13 +58,18 @@ void ShowInvalidInputMessage()
 	std::cout << "Invalid input!\n" << std::endl;
 }
 
+void InstructPresetNum() 
+{
+	std::cout << "Please enter a valid preset [ 0 - 10 ] : ";
+}
+
 void InputValidator(int& x, const int LOWERLIMIT, const int UPPERLIMIT) { //Checks if the input is an integer
 	if (x < LOWERLIMIT || x > UPPERLIMIT)
 		ShowInvalidInputMessage();
 	while (std::cin.fail()) {
 		ShowInvalidInputMessage();
-		std::cin.clear();
-		std::cin.ignore(256, '\n');
+		std::cin.clear(); //Clears the error
+		std::cin.ignore(256, '\n'); //Ignores next 256 characters until it meets a sentinel, in this case a newline
 		std::cin >> x;
 		std::cout << std::endl;
 	}
