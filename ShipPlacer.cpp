@@ -1,3 +1,20 @@
+/**
+*
+* Solution to course project # 8
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia
+University
+* Winter semester 2021/2022
+*
+* @author Antoan Ivaylov
+* @idnumber 7MI0600129
+* @compiler VC
+*
+* Source code for ship placement/ removal
+*
+*/
+
+
 #include <iostream>
 #include "ShipPlacer.h"
 
@@ -17,7 +34,6 @@ bool IsNearbyShipUp(char boardOfPlayer[10][10], int row, int column, const int L
 				if (IsShipUpLeftDiagonal(boardOfPlayer, row, column)) return true;
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipRight(boardOfPlayer, row, column)) return true;
@@ -30,22 +46,17 @@ bool IsNearbyShipUp(char boardOfPlayer[10][10], int row, int column, const int L
 			if (IsShip(boardOfPlayer, row, column)) return true;
 			if (IsShipUp(boardOfPlayer, row, column)) return true;
 
-
 			if (column != 0)
 			{
-				//if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 				if (IsShipUpLeftDiagonal(boardOfPlayer, row, column)) return true;
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipRight(boardOfPlayer, row, column)) return true;
 				if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
-				//if (IsShipDownRightDiagonal(boardOfPlayer, row, column)) return true;
 			}
 		}
-
 		row--;
 	}
 	return  false;
@@ -80,22 +91,17 @@ bool IsNearbyShipDown(char boardOfPlayer[10][10], int row, int column, const int
 			if (IsShip(boardOfPlayer, row, column)) return true;
 			if (IsShipDown(boardOfPlayer, row, column)) return true;
 
-
 			if (column != 0)
 			{
 				if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
-				//if (IsShipUpLeftDiagonal(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
-				//if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
 				if (IsShipRight(boardOfPlayer, row, column)) return true;
 				if (IsShipDownRightDiagonal(boardOfPlayer, row, column)) return true;
 			}
 		}
-
 		row++;
 	}
 	return  false;
@@ -117,7 +123,6 @@ bool IsNearbyShipLeft(char boardOfPlayer[10][10], int row, int column, const int
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 				if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
@@ -128,12 +133,8 @@ bool IsNearbyShipLeft(char boardOfPlayer[10][10], int row, int column, const int
 		else
 		{
 			if (IsShip(boardOfPlayer, row, column)) return true;
-			//if (IsShipLeft(boardOfPlayer, row, column)) return true;
 			if (IsShipDown(boardOfPlayer, row, column)) return true;
 			if (IsShipUp(boardOfPlayer, row, column)) return true;
-
-
-
 
 			if (column != 0)
 			{
@@ -141,7 +142,6 @@ bool IsNearbyShipLeft(char boardOfPlayer[10][10], int row, int column, const int
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 				if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
@@ -149,7 +149,6 @@ bool IsNearbyShipLeft(char boardOfPlayer[10][10], int row, int column, const int
 				if (IsShipDownRightDiagonal(boardOfPlayer, row, column)) return true;
 			}
 		}
-
 		column--;
 	}
 	return  false;
@@ -170,7 +169,6 @@ bool IsNearbyShipRight(char boardOfPlayer[10][10], int row, int column, const in
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 				if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
@@ -181,12 +179,8 @@ bool IsNearbyShipRight(char boardOfPlayer[10][10], int row, int column, const in
 		else
 		{
 			if (IsShip(boardOfPlayer, row, column)) return true;
-			//if (IsShipLeft(boardOfPlayer, row, column)) return true;
 			if (IsShipDown(boardOfPlayer, row, column)) return true;
 			if (IsShipUp(boardOfPlayer, row, column)) return true;
-
-
-
 
 			if (column != 0)
 			{
@@ -194,7 +188,6 @@ bool IsNearbyShipRight(char boardOfPlayer[10][10], int row, int column, const in
 				if (IsShipLeft(boardOfPlayer, row, column)) return true;
 				if (IsShipDownLeftDiagonal(boardOfPlayer, row, column)) return true;
 			}
-
 			if (column != 9)
 			{
 				if (IsShipUpRightDiagonal(boardOfPlayer, row, column)) return true;
@@ -202,7 +195,6 @@ bool IsNearbyShipRight(char boardOfPlayer[10][10], int row, int column, const in
 				if (IsShipDownRightDiagonal(boardOfPlayer, row, column)) return true;
 			}
 		}
-
 		column++;
 	}
 	return  false;
@@ -250,63 +242,44 @@ bool IsShipDownRightDiagonal(char boardOfPlayer[10][10], int row, int col)
 
 
 bool ShipPlacer(char boardOfPlayer[10][10], int row, int column, const int LengthOfShipType, const char direction) {
-	// 5 - 4 - right - small, i -rows / k - columns
 	int remLength = LengthOfShipType;
 	if (direction == 'D') {
 
 		if (10 - row >= LengthOfShipType)
 		{
-
 			if (IsNearbyShipDown(boardOfPlayer, row, column, LengthOfShipType))
 			{
 				std::cout << "Invalid placement" << std::endl;
-
 				return false;
 			}
 
-
 			for (unsigned int i = 0; i < LengthOfShipType; i++) {
-
-
 				boardOfPlayer[row][column] = 'S'; // Go down
 				row++;
-
 			}
 			return  true;
 		}
 		else
-		{
 			return false;
-		}
-
 	}
 	else if (direction == 'U') {
 		if (row + 1 >= LengthOfShipType)
 		{
-
 			if (IsNearbyShipUp(boardOfPlayer, row, column, LengthOfShipType))
 			{
 				std::cout << "Invalid placement" << std::endl;
-
 				return false;
 			}
 
 			for (unsigned int i = 0; i < LengthOfShipType; i++) {
-
 				boardOfPlayer[row][column] = 'S'; // Go up
 				row--;
-
 			}
 			return  true;
-
 		}
 		else
-		{
 			return false;
-
-		}
 	}
-
 	else if (direction == 'L')
 	{
 		if (column + 1 >= LengthOfShipType)
@@ -317,46 +290,32 @@ bool ShipPlacer(char boardOfPlayer[10][10], int row, int column, const int Lengt
 
 				return false;
 			}
-
 			for (unsigned int i = 0; i < LengthOfShipType; i++) {
 				boardOfPlayer[row][column] = 'S'; //Go left
 				column--;
-
 			}
 			return  true;
-
 		}
 		else
-		{
 			return false;
-
-		}
 	}
-
 	else
 	{
-
 		if (IsNearbyShipRight(boardOfPlayer, row, column, LengthOfShipType))
 		{
 			std::cout << "Invalid placement" << std::endl;
-
 			return false;
 		}
-
 		if (10 - column >= LengthOfShipType)
 		{
 			for (unsigned int i = 0; i < LengthOfShipType; i++) {
 				boardOfPlayer[row][column] = 'S'; //Go right
 				column++;
-
 			}
 			return  true;
-
 		}
 		else
-		{
 			return false;
-		}
 	}
 
 }

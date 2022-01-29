@@ -1,5 +1,21 @@
+/**
+*
+* Solution to course project # 8
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia
+University
+* Winter semester 2021/2022
+*
+* @author Antoan Ivaylov
+* @idnumber 7MI0600129
+* @compiler VC
+*
+* Source code for the menu functions, mainly console printing ones and the console input validator
+*
+*/
+
 #include <iostream>
-#include  "Menus.h"
+#include "Menus.h"
 
 void ShowWelcomeMenuMessage()
 {
@@ -7,7 +23,6 @@ void ShowWelcomeMenuMessage()
 	std::cout << "1) Start" << std::endl;
 	std::cout << "2) Exit" << std::endl;
 	std::cout << "Your choice: ";
-
 }
 
 void ShowPlayerMenuMessage(int playerNumber)
@@ -30,6 +45,7 @@ void ShowInvalidRowMessage()
 	std::cout << "Invalid input! " << std::endl;
 	std::cout << "Please enter row again: ";
 }
+
 void ShowInvalidColumnMessage()
 {
 	std::cout << "Invalid input " << std::endl;
@@ -53,21 +69,24 @@ void ShowAfterSuccessfulHitMessage()
 	std::cout << "Your choice: ";
 }
 
-void ShowInvalidInputMessage()
+void ShowInvalidInputMessage(const int LOWERLIMIT, const int UPPERLIMIT)
 {
-	std::cout << "Invalid input!\n" << std::endl;
+	std::cout << "Invalid input! Please enter a number between [" << LOWERLIMIT << " - " << UPPERLIMIT << "] \n" << std::endl;
 }
 
 void InstructPresetNum() 
 {
-	std::cout << "Please enter a valid preset [ 0 - 10 ] : ";
+	std::cout << "Please enter a valid preset [0 - 10] : ";
 }
 
-void InputValidator(int& x, const int LOWERLIMIT, const int UPPERLIMIT) { //Checks if the input is an integer
-	if (x < LOWERLIMIT || x > UPPERLIMIT)
-		ShowInvalidInputMessage();
-	while (std::cin.fail()) {
-		ShowInvalidInputMessage();
+void SkipFiftyRows()
+{
+	for (unsigned int i = 0; i < 50; i++)
+		std::cout << std::endl;
+}
+void InputValidator(int& x, const int LOWERLIMIT, const int UPPERLIMIT) { //Checks if the input is an integer and is inside borders
+	while (std::cin.fail() || (x < LOWERLIMIT) || (x > UPPERLIMIT)) {
+		ShowInvalidInputMessage(LOWERLIMIT, UPPERLIMIT);
 		std::cin.clear(); //Clears the error
 		std::cin.ignore(256, '\n'); //Ignores next 256 characters until it meets a sentinel, in this case a newline
 		std::cin >> x;

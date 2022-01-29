@@ -1,6 +1,6 @@
 /**
 *
-* Solution to course project
+* Solution to course project # 8
 * Introduction to programming course
 * Faculty of Mathematics and Informatics of Sofia
 University
@@ -10,7 +10,7 @@ University
 * @idnumber 7MI0600129
 * @compiler VC
 *
-* Main Game (in progress..)
+* Main Game - Entry menu
 *
 */
 
@@ -39,16 +39,14 @@ int main()
 		ShowWelcomeMenuMessage();
 
 		std::cin >> option;
-
+		InputValidator(option, 1, 2);
 
 		switch (option) {
 
-		case 1:StartGame(boardPlayerOne, boardPlayerTwo);
+			case 1:StartGame(boardPlayerOne, boardPlayerTwo);
 			run = false;
-			break;
-		case 2: return 0;
-		default:
-			InputValidator(option, 1, 2);
+				break;
+			default: return 0; //case 2 - exit
 		}
 
 	}
