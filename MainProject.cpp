@@ -24,11 +24,11 @@ University
 
 int main()
 {
-	char boardPlayerOne[10][10];
+	char boardPlayerOne[10][10]; //Functioning Boards
 	char boardPlayerTwo[10][10];
 
-	BoardCreator(boardPlayerOne);
-	BoardCreator(boardPlayerTwo);
+	FunctionalBoardCreator(boardPlayerOne);
+	FunctionalBoardCreator(boardPlayerTwo);
 
 	bool run = true;
 

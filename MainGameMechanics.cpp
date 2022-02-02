@@ -29,13 +29,11 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 	int unhitSpotsPlayerOne = 31;
 	int unhitSpotsPlayerTwo = 31;
 
-	char boardToShowToOpponentPlayerOne[10][10];
-	char boardToShowToOpponentPlayerTwo[10][10];
-	//char boardToBeAttacked[22][22];
-	BoardCreator(boardToShowToOpponentPlayerOne);
-	BoardCreator(boardToShowToOpponentPlayerTwo);
-	//AttackedBoardCreator(boardToBeAttacked); Bugged for now
-	//ShowAttackedBoard(boardToBeAttacked);
+	char showedBoardPlayer1[22][22];
+	char showedBoardPlayer2[22][22];
+	
+	VisualBoardCreator(showedBoardPlayer1);
+	VisualBoardCreator(showedBoardPlayer2);
 
 	// Setup board of player 1
 	while (run1)
@@ -47,7 +45,7 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 
 		switch (option)
 		{
-			case 1: ManualPlace(boardPlayerOne);
+			case 1: ManualPlace(boardPlayerOne, showedBoardPlayer1);
 				run1 = false;
 					break;
 
@@ -60,8 +58,9 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		}
 	}
 
-	ShowBoard(boardPlayerOne);
-	std::cout << std::endl;
+	BoardAtStart(showedBoardPlayer1, boardPlayerOne);
+	ShowVisualBoard(showedBoardPlayer1);
+	ClearBoard(showedBoardPlayer1);
 	SkipFiftyRows();
 
 	//Setup board of player 2
@@ -74,7 +73,7 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		
 		switch (option)
 		{
-			case 1:ManualPlace(boardPlayerTwo);
+			case 1:ManualPlace(boardPlayerTwo, showedBoardPlayer2);
 				run2 = false;
 					break;
 
@@ -87,8 +86,9 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		}
 	}
 
-	ShowBoard(boardPlayerTwo);
-	std::cout << std::endl;
+	BoardAtStart(showedBoardPlayer2, boardPlayerTwo);
+	ShowVisualBoard(showedBoardPlayer2);
+	ClearBoard(showedBoardPlayer2);
 	SkipFiftyRows();
 
 	while (unhitSpotsPlayerOne > 0 && unhitSpotsPlayerTwo > 0)
@@ -100,7 +100,7 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cout << std::endl;
 
 		std::cout << "Coordinates to attack" << std::endl;
-		ShowBoard(boardToShowToOpponentPlayerTwo);
+		ShowVisualBoard(showedBoardPlayer2);
 		std::cout << std::endl;
 		
 		std::cout << "Row (between [0 ; 9]): ";
@@ -111,17 +111,20 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cin >> column;
 		InputValidator(column, 0, 9);
 
-		ShowBoard(boardToShowToOpponentPlayerTwo); //Initial showup
+		ShowVisualBoard(showedBoardPlayer2); //Initial showup
 
-		while (Attack(boardPlayerTwo, boardToShowToOpponentPlayerTwo, row, column, unhitSpotsPlayerTwo)) //If player 1 is on turn
+		while (Attack(boardPlayerTwo, showedBoardPlayer2, row, column, unhitSpotsPlayerTwo)) //If player 1 is on turn
 		{
 			int option = 0;
 
 			unhitSpotsPlayerTwo--;
+			if (unhitSpotsPlayerTwo == 0) //The game is already over
+				break;
+			
 			ShowHitTargetMessage();
 			std::cout << std::endl;
 
-			ShowBoard(boardToShowToOpponentPlayerTwo);
+			ShowVisualBoard(showedBoardPlayer2);
 			std::cout << std::endl;
 
 			ShowAfterSuccessfulHitMessage();
@@ -181,7 +184,7 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cout << std::endl;
 
 		std::cout << "Coordinates to attack:" << std::endl;
-		ShowBoard(boardToShowToOpponentPlayerOne);
+		ShowVisualBoard(showedBoardPlayer1);
 		std::cout << std::endl;
 		std::cout << "Row (between [0 ; 9]): ";
 		std::cin >> row;
@@ -191,16 +194,19 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 		std::cin >> column;
 		InputValidator(column, 0, 9);
 		
-		ShowBoard(boardToShowToOpponentPlayerOne);
+		ShowVisualBoard(showedBoardPlayer1);
 		
-		while (Attack(boardPlayerOne, boardToShowToOpponentPlayerOne, row, column, unhitSpotsPlayerOne)) //If player 2 is on turn
+		while (Attack(boardPlayerOne, showedBoardPlayer1, row, column, unhitSpotsPlayerOne)) //If player 2 is on turn
 		{
 			int option = 0;
 			unhitSpotsPlayerOne--;
+			if (unhitSpotsPlayerOne == 0) //The game is already over
+				break;
+			
 			ShowHitTargetMessage();
 			std::cout << std::endl;
 
-			ShowBoard(boardToShowToOpponentPlayerOne);
+			ShowVisualBoard(showedBoardPlayer1);
 			std::cout << std::endl;
 
 			ShowAfterSuccessfulHitMessage();
@@ -266,21 +272,21 @@ void StartGame(char boardPlayerOne[10][10], char boardPlayerTwo[10][10])
 	}
 }
 
-bool Attack(char boardOfPlayer[10][10], char boardToShowToOpponent[10][10], int rowCoordinate, int columnCoordinate, int &unHitSpotsPlayer) {
-	if (boardOfPlayer[rowCoordinate][columnCoordinate] == 'C')
+bool Attack(char functionBoardOfPlayer[10][10], char printedBoardOfPlayer[22][22], int rowCoordinate, int columnCoordinate, int &unHitSpotsPlayer) {
+	if (functionBoardOfPlayer[rowCoordinate][columnCoordinate] == 'C')
 	{
 		std::cout << "You have already made a guess for this spot, please make a new one : " << std::endl;
 		unHitSpotsPlayer++;//To compensate for returning true, while we do not make any change to the board
 		return true;
 	}
-	if (boardOfPlayer[rowCoordinate][columnCoordinate] == 'S') {
-		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'H'; // H for hit
-		boardOfPlayer[rowCoordinate][columnCoordinate] = 'C'; //C for checked
+	if (functionBoardOfPlayer[rowCoordinate][columnCoordinate] == 'S') {
+		printedBoardOfPlayer[(rowCoordinate * 2) + 2][(columnCoordinate * 2) + 2] = 'H'; // H for hit, (coordinate * 2) + 2 to have correct aritmetics as we have twice as much cells plus the 2 front leading
+		functionBoardOfPlayer[rowCoordinate][columnCoordinate] = 'C'; //C for checked
 		return true; // You have hit the target
 	}
 	else {
-		boardToShowToOpponent[rowCoordinate][columnCoordinate] = 'X'; // X for miss
-		boardOfPlayer[rowCoordinate][columnCoordinate] = 'C';
+		printedBoardOfPlayer[(rowCoordinate * 2) + 2][(columnCoordinate * 2) + 2] = '#'; // Hash symbol for miss, (coordinate * 2) + 2 to have correct aritmetics as we have twice as much cells plus the 2 front leading
+		functionBoardOfPlayer[rowCoordinate][columnCoordinate] = 'C';
 		std::cout << "There was nothing!" << std::endl;
 		std::cout << std::endl;
 		return false;

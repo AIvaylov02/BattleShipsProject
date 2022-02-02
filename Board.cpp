@@ -19,26 +19,18 @@ University
 #include "ShipPlacer.h"
 #include "Menus.h"
 
-void ShowBoard(const char boardOfPlayer[10][10]) {
-	for (unsigned int i = 0; i < 10; i++)
-	{
-		for (unsigned int k = 0; k < 10; k++)
-			std::cout << boardOfPlayer[i][k];
-		std::cout << '\n';
-	}
-}
-void BoardCreator(char boardOfPlayer[10][10]) {
+void FunctionalBoardCreator(char boardOfPlayer[10][10]) {
 	for (unsigned int i = 0; i < 10; i++)
 		for (unsigned int k = 0; k < 10; k++)
 			boardOfPlayer[i][k] = '-';
 }
 
-/*void AttackedBoardCreator(char boardToBeSeen[22][22]) { //We already have 22 by 22 board
-	unsigned int rowDigit = 0;
-	unsigned int columnDigit = 0;
+void VisualBoardCreator(char boardToBeSeen[22][22]) { //We already have 22 by 22 board
+	char rowDigit = '0';
+	char columnDigit = '0';
 
 	for (unsigned int i = 0; i < 22; i++) {
-		if(i==0) //top row
+		if (i == 0) //top row
 			for (unsigned int k = 0; k < 22; k++) {
 				if (k == 0)
 					boardToBeSeen[i][k] = ' ';
@@ -68,17 +60,33 @@ void BoardCreator(char boardOfPlayer[10][10]) {
 	}
 }
 
+void BoardAtStart(char boardToBeSeen[22][22], const char boardOfPlayer[10][10]) {
+	for (unsigned int i = 2, fRows = 0; i < 22; i += 2) //function rows
+	{
+		for (unsigned int j = 2, fColumns = 0; j < 22; j += 2) //function columns
+		{
+			if (boardOfPlayer[fRows][fColumns] == 'S')
+				boardToBeSeen[i][j] = 'S';
+			fColumns++;
+		}
+		fRows++;
+	}
+}
 
-void ShowAttackedBoard(const char boardToBeSeen[22][22]) {
+void ClearBoard(char boardToBeSeen[22][22]) { //clears the even boxes -> clears the playable spaces
+	for (unsigned int i = 2; i < 22; i += 2)
+		for (unsigned int j = 2; j < 22; j += 2)
+			boardToBeSeen[i][j] = ' ';
+}
+
+void ShowVisualBoard(const char boardToBeSeen[22][22]) {
 	for (unsigned int i = 0; i < 22; i++)
 	{
 		for (unsigned int k = 0; k < 22; k++)
 			std::cout << boardToBeSeen[i][k];
 		std::cout << std::endl;
 	}
-	std::cout << boardToBeSeen[0][2];
 }
-*/
 
 void PresetBoard(char boardOfPlayer[10][10], unsigned int numOfBoard) {
 	switch (numOfBoard) {
@@ -217,7 +225,7 @@ void PresetBoard(char boardOfPlayer[10][10], unsigned int numOfBoard) {
 	}
 }
 
-void ManualPlace(char boardOfPlayer[10][10])
+void ManualPlace(char boardOfPlayer[10][10], char boardToBeSeen[22][22])
 {
 	const int MAXSHIPS = 10;
 	const int LENGTHofSmallShip = 2;
@@ -245,7 +253,7 @@ void ManualPlace(char boardOfPlayer[10][10])
 		std::cout << "1) Small ship   -	2 blocks length " << std::endl;
 		std::cout << "2) Medium ship  -	3 blocks length " << std::endl;
 		std::cout << "3) Large ship   -	4 blocks length " << std::endl;
-		std::cout << "4) Cruiser ship - 4 blocks length " << std::endl;
+		std::cout << "4) Cruiser ship -	6 blocks length " << std::endl;
 		std::cout << "Your choice: ";
 
 		std::cin >> shipOption;
@@ -255,61 +263,61 @@ void ManualPlace(char boardOfPlayer[10][10])
 		switch (shipOption)
 		{
 
-			case 1:
-				if (NumberofSmallShips > 0)
-				{
-					currentShipLength = LENGTHofSmallShip;
-					NumberofSmallShips--;
-				}
-				else
-				{
-					std::cout << "There are no more small ships left to place! " << std::endl;
-					std::cout << "Try again! " << std::endl;
-					std::cout << std::endl;
-					continue;
-				}
-				break;
-			case 2:
-				if (NumberofMediumShips > 0)
-				{
-					currentShipLength = LENGTHofMediumShip;
-					NumberofMediumShips--;
-				}
-				else
-				{
-					std::cout << "There are no more medium ships left to place! " << std::endl;
-					std::cout << "Try again! " << std::endl;
-					std::cout << std::endl;
-					continue;
-				}
-				break;
-			case 3:
-				if (NumberofLargeShips > 0)
-				{
-					currentShipLength = LENGTHofLargeShip;
-					NumberofLargeShips--;
-				}
-				else
-				{
-					std::cout << "There are no more large ships left to place! " << std::endl;
-					std::cout << "Try again! " << std::endl;
-					std::cout << std::endl;
-					continue;
-				}
-				break;
-			default: //case 4
-				if (NumberofCruisers > 0) {
+		case 1:
+			if (NumberofSmallShips > 0)
+			{
+				currentShipLength = LENGTHofSmallShip;
+				NumberofSmallShips--;
+			}
+			else
+			{
+				std::cout << "There are no more small ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
+				std::cout << std::endl;
+				continue;
+			}
+			break;
+		case 2:
+			if (NumberofMediumShips > 0)
+			{
+				currentShipLength = LENGTHofMediumShip;
+				NumberofMediumShips--;
+			}
+			else
+			{
+				std::cout << "There are no more medium ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
+				std::cout << std::endl;
+				continue;
+			}
+			break;
+		case 3:
+			if (NumberofLargeShips > 0)
+			{
+				currentShipLength = LENGTHofLargeShip;
+				NumberofLargeShips--;
+			}
+			else
+			{
+				std::cout << "There are no more large ships left to place! " << std::endl;
+				std::cout << "Try again! " << std::endl;
+				std::cout << std::endl;
+				continue;
+			}
+			break;
+		default: //case 4
+			if (NumberofCruisers > 0) {
 				currentShipLength = LENGTHofCruiser;
 				NumberofCruisers--;
-				}
-				else
-				{
+			}
+			else
+			{
 				std::cout << "There are no more cruiser ships left to place! " << std::endl;
 				std::cout << "Try again! " << std::endl;
 				std::cout << std::endl;
 				continue;
-				}
-				break;
+			}
+			break;
 		}
 		std::cout << "Coordinates of the starting point: " << std::endl;
 		std::cout << "*Row (between [0 ; 9]): ";
@@ -331,14 +339,14 @@ void ManualPlace(char boardOfPlayer[10][10])
 
 		switch (directionOption) {
 
-			case 1: direction = 'U';
-				break;
-			case 2: direction = 'D';
-				break;
-			case 3: direction = 'L';
-				break;
-			default: direction = 'R'; //case 4
-				break;
+		case 1: direction = 'U';
+			break;
+		case 2: direction = 'D';
+			break;
+		case 3: direction = 'L';
+			break;
+		default: direction = 'R'; //case 4
+			break;
 		}
 
 		if (!ShipPlacer(boardOfPlayer, row, column, currentShipLength, direction))
@@ -346,12 +354,40 @@ void ManualPlace(char boardOfPlayer[10][10])
 			std::cout << "Invalid placement !" << std::endl;
 			std::cout << "Please try again ! " << std::endl;
 			std::cout << std::endl;
+			switch (currentShipLength) { //to reset the lenght of the ship
+				case 2:
+					NumberofSmallShips++;
+					break;
+				case 3:
+					NumberofMediumShips++;
+					break;
+				case 4:
+					NumberofLargeShips++;
+					break;
+				default:
+					NumberofCruisers++;
+			}
 			continue;
 		}
 
 		placedShips++;
-
-		ShowBoard(boardOfPlayer);
+		for (unsigned int i = 2, fRows = 0; i < 22; i += 2) //function rows - BoardAtStartFunction - const/ not const array missmatch
+		{
+			for (unsigned int j = 2, fColumns = 0; j < 22; j += 2) //function columns
+			{
+				if (boardOfPlayer[fRows][fColumns] == 'S')
+					boardToBeSeen[i][j] = 'S';
+				fColumns++;
+			}
+			fRows++;
+		}
+		for (unsigned int i = 0; i < 22; i++) //ShowVisualBoardFunction - const/ not const array missmatch
+		{
+			for (unsigned int k = 0; k < 22; k++)
+				std::cout << boardToBeSeen[i][k];
+			std::cout << std::endl;
+		}
+		
 		std::cout << std::endl;
 		std::cout << "-----------------------------" << std::endl;
 		std::cout << "Number of ships remaining: " << 10 - placedShips << std::endl;
@@ -369,13 +405,13 @@ void ManualPlace(char boardOfPlayer[10][10])
 
 		switch (changeOption)
 		{
-			case 1: RemoveShip(boardOfPlayer, row, column, currentShipLength, direction);
-				std::cout << "Enter your new ship position: " << std::endl;
-				std::cout << std::endl;
-				placedShips--;
-				break;
-			default:
-				continue;
+		case 1: RemoveShip(boardOfPlayer, row, column, currentShipLength, direction);
+			std::cout << "Enter your new ship position: " << std::endl;
+			std::cout << std::endl;
+			placedShips--;
+			break;
+		default:
+			continue;
 		}
 	}
 }
