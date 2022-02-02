@@ -354,7 +354,7 @@ void ManualPlace(char boardOfPlayer[10][10], char boardToBeSeen[22][22])
 			std::cout << "Invalid placement !" << std::endl;
 			std::cout << "Please try again ! " << std::endl;
 			std::cout << std::endl;
-			switch (currentShipLength) { //to reset the lenght of the ship
+			switch (currentShipLength) { //to reset the number of that the ship
 				case 2:
 					NumberofSmallShips++;
 					break;
@@ -369,9 +369,10 @@ void ManualPlace(char boardOfPlayer[10][10], char boardToBeSeen[22][22])
 			}
 			continue;
 		}
-
 		placedShips++;
-		for (unsigned int i = 2, fRows = 0; i < 22; i += 2) //function rows - BoardAtStartFunction - const/ not const array missmatch
+		ClearBoard(boardToBeSeen); // in case we decided to change a ships position
+		
+		for (unsigned int i = 2, fRows = 0; i < 22; i += 2) //function rows - BoardAtStartFunction - const/ not const array missmatch - fills our visual array
 		{
 			for (unsigned int j = 2, fColumns = 0; j < 22; j += 2) //function columns
 			{
@@ -408,6 +409,19 @@ void ManualPlace(char boardOfPlayer[10][10], char boardToBeSeen[22][22])
 		case 1: RemoveShip(boardOfPlayer, row, column, currentShipLength, direction);
 			std::cout << "Enter your new ship position: " << std::endl;
 			std::cout << std::endl;
+			switch (currentShipLength) { //to reset the number of that the ship
+			case 2:
+				NumberofSmallShips++;
+				break;
+			case 3:
+				NumberofMediumShips++;
+				break;
+			case 4:
+				NumberofLargeShips++;
+				break;
+			default:
+				NumberofCruisers++;
+			}
 			placedShips--;
 			break;
 		default:
